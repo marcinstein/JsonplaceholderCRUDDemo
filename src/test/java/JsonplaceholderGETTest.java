@@ -45,4 +45,40 @@ public class JsonplaceholderGETTest {
  //       System.out.println(response.asString());
 
     }
+
+    //Path Variables
+
+    @Test
+    public void jsonplaceholderReadOneUserWithPathVariable(){
+        Response response = given()
+                .pathParam("userId", 1)
+                .when()
+                .get("https://jsonplaceholder.typicode.com/users/{userId}");
+        Assertions.assertEquals(200,response.statusCode());
+
+        JsonPath json = response.jsonPath();
+
+        Assertions.assertEquals("Leanne Graham", json.get("name"));
+        Assertions.assertEquals("Bret", json.get("username"));
+        Assertions.assertEquals("Sincere@april.biz", json.get("email"));
+
+    }
+
+    //Query param
+    @Test
+    public void jsonplaceholderReadOneUserWithQueryParams(){
+        Response response = given()
+                .queryParam("username","Bret")
+                .when()
+                .get("https://jsonplaceholder.typicode.com/users");
+        Assertions.assertEquals(200,response.statusCode());
+
+        JsonPath json = response.jsonPath();
+
+        Assertions.assertEquals("Leanne Graham", json.getList("name").get(0));
+        Assertions.assertEquals("Bret", json.getList("username").get(0));
+        Assertions.assertEquals("Sincere@april.biz", json.getList("email").get(0));
+
+    }
+
 }
